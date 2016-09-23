@@ -31,6 +31,14 @@ namespace jamesiarmes\PhpEws\Ntlm;
  */
 class SoapClient extends \SoapClient
 {
+    // Default timeout
+    const DEFAULT_TIMEOUT = 10;
+
+    /**
+     * @var int
+     */
+    protected $timeout;
+
     /**
      * cURL resource used to make the SOAP request
      *
@@ -44,6 +52,17 @@ class SoapClient extends \SoapClient
      * @var boolean
      */
     protected $validate = false;
+
+    /**
+     * @param string $wsdl
+     * @param array $options
+     */
+    public function __construct($wsdl, array $options)
+    {
+        $this->timeout = array_key_exists('timeout', $options) ? (int) $options['timeout'] : self::DEFAULT_TIMEOUT;
+
+        parent::__construct($wsdl, $options);
+    }
 
     /**
      * Performs a SOAP request
@@ -70,6 +89,7 @@ class SoapClient extends \SoapClient
         $this->__last_request_headers = $headers;
         $this->ch = curl_init($location);
 
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, $this->validate);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, $this->validate);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
