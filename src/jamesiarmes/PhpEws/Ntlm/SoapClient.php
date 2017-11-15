@@ -32,7 +32,7 @@ namespace jamesiarmes\PhpEws\Ntlm;
 class SoapClient extends \SoapClient
 {
     // Default timeout
-    const DEFAULT_TIMEOUT = 10;
+    const DEFAULT_TIMEOUT = 30;
 
     /**
      * @var int
